@@ -18,7 +18,7 @@ let getReposByUsername = (username) => {
 
   axios.get(options.url, options.headers)
   .then((results) => {
-    database.save(results);
+    database.save(results.data);
   })
   .catch((error) => {
     console.log(error);

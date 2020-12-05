@@ -15,6 +15,12 @@ app.post('/repos', function (req, res) {
   console.log('username: ', req.body.username);
   let username = req.body.username;
   helpers.getReposByUsername(username)
+  .then((results) => {
+    database.save(results.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
 
 });
 

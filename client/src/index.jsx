@@ -23,8 +23,10 @@ class App extends React.Component {
       contentType: 'application/json',
       data: JSON.stringify(q)
     }).done(
-
-      //console.log('data', data);
+      //TODO
+    ).fail(
+      console.log(error)
+      //TODO
     )
   }
 

@@ -25,7 +25,6 @@ class App extends React.Component {
     }).done(
       //TODO
     ).fail(
-      console.log(error)
       //TODO
     )
   }

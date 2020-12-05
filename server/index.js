@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const helpers = require('../helpers/github.js')
+const helpers = require('../helpers/github.js');
+const database  = require('../server/')
 
 let app = express();
 
@@ -14,13 +15,13 @@ app.post('/repos', function (req, res) {
   // save the repo information in the database
   console.log('username: ', req.body.username);
   let username = req.body.username;
-  helpers.getReposByUsername(username)
-  .then((results) => {
-    database.save(results.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  console.log(helpers.getReposByUsername(username));
+  // .then((results) => {
+  //   database.save(results.data);
+  // })
+  // .catch((error) => {
+  //   console.log(error);
+  // })
 
 });
 

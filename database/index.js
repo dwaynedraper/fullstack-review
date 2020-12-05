@@ -29,7 +29,7 @@ let save = (repos) => {
       url: repo.html_url
     });
     mongoRepo.save((err, mongoRepo) => {
-      if (err) return console.erro(err);
+      if (err) return console.error(err);
     })
   })
 

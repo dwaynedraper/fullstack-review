@@ -15,13 +15,13 @@ app.post('/repos', function (req, res) {
   // save the repo information in the database
   console.log('username: ', req.body.username);
   let username = req.body.username;
-  console.log(helpers.getReposByUsername(username));
-  // .then((results) => {
-  //   database.save(results.data);
-  // })
-  // .catch((error) => {
-  //   console.log(error);
-  // })
+  return helpers.getReposByUsername(username)
+  .then((results) => {
+    database.save(results.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
 
 });
 

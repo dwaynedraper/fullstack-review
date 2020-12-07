@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/fetchertest', { useMongoClient: true });
 
 // TODO : Should I add the 'new' keyword?
 let repoSchema = mongoose.Schema({
@@ -18,20 +18,22 @@ let save = (repos) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
-  repos.forEach((repo) => {
-    //TODO - instantiate a check to see if repo exists after getting save function working
-    let mongoRepo = new Repo({
-      repoId: repo.id,
-      repoName: repo.name,
-      userId: repo.owner.id,
-      userName: repo.owner.login,
-      createdAt: repo.created_at,
-      url: repo.html_url
-    });
-    mongoRepo.save((err, mongoRepo) => {
-      if (err) return console.error(err);
-    })
+  // repos.forEach((repo) => {
+  //   //TODO - instantiate a check to see if repo exists after getting save function working
+  //   let mongoRepo = new Repo({
+  //     repoId: repo.id,
+  //     repoName: repo.name,
+  //     userId: repo.owner.id,
+  //     userName: repo.owner.login,
+  //     createdAt: repo.created_at,
+  //     url: repo.html_url
+  //   });
+
+  // })
+  let promises = repos.map((repo) => {
+    return Repo.findOneAndUpdate(repo.id, repo, {upsert: true}).exec();
   })
+  return Promise.all(promises)
 
 
 }

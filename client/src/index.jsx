@@ -24,8 +24,20 @@ class App extends React.Component {
       data: JSON.stringify(q)
     }).done(
       //TODO
+      $.ajax({
+        url: '/repos',
+        method: 'GET',
+        contentType: 'application/json',
+        data: JSON.stringify(q)
+      })
+      .done((data) => {
+        this.setState({repos: data})
+      })
+      .fail(
+        console.log('GET failed')
+      )
     ).fail(
-      //TODO
+      console.log(('POST failed'))
     )
   }
 

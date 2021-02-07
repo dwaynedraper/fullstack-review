@@ -2,10 +2,9 @@ const axios = require('axios');
 const config = require('../config.js');
 const database = require('../database/')
 
-let getReposByUsername = (username) => {
+let getReposByUsername = (username, callback) => {
   // TODO - Use the axios module to request repos for a specific
   // user from the github API
-  console.log('get repos called')
   // The options object has been provided to help you out,
   // but you'll have to fill in the URL
   let options = {
@@ -16,7 +15,14 @@ let getReposByUsername = (username) => {
     }
   };
 
-  return axios.get(options.url, options.headers);
+  axios.get(options.url, options.headers)
+  .then((response) => {
+    console.log('response', response.data.length, typeof(response.data));
+    callback(null, response.data);
+  })
+  .catch((error) => {
+    callback(error);
+  })
 
 }
 

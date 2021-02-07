@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const helpers = require('../helpers/github.js');
-const database  = require('../server/')
+const database  = require('../database/index.js')
 
 let app = express();
 
@@ -13,14 +13,16 @@ app.post('/repos', function (req, res) {
   // This route should take the github username provided
   // and get the repo information from the github API, then
   // save the repo information in the database
-  console.log('username: ', req.body.username);
   let username = req.body.username;
-  return helpers.getReposByUsername(username)
-  .then((results) => {
-    database.save(results.data);
-  })
-  .catch((error) => {
-    console.log(error);
+  helpers.getReposByUsername(username, (err, results)  => {
+    if (err) {
+      res.send(err);
+    } else {
+      results.forEach((result) => {
+        db.save(result)
+      })
+      res.sendStatus(200);
+    }
   })
 
 });

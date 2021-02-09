@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetchertest', { useMongoClient: true });
+mongoose.Promise = require('bluebird');
 
 // TODO : Should I add the 'new' keyword?
+
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
   repoId: {
@@ -18,28 +20,39 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repos) => {
+let save = (repo) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
-  // repos.forEach((repo) => {
-  //   //TODO - instantiate a check to see if repo exists after getting save function working
-    let mongoRepo = new Repo({
-      repoId: repo.id,
-      repoName: repo.name,
-      userId: repo.owner.id,
-      userName: repo.owner.login,
-      createdAt: repo.created_at,
-      url: repo.html_url
-    });
+  //TODO - instantiate a check to see if repo exists after getting save function working
+  let mongoRepo = new Repo({
+    repoId: repo.id,
+    repoName: repo.name,
+    userId: repo.owner.id,
+    userName: repo.owner.login,
+    createdAt: repo.created_at,
+    url: repo.html_url
+  });
+  console.log('mongoRepo', mongoRepo)
+  Repo.findOneAndUpdate({repoId: repo.id}, {upsert:true}, (err, results) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('success saving')
+    }
+  })
+};
 
-  // })
-  // let promises = repos.map((repo) => {
-  //   return Repo.findOneAndUpdate(repo.id, repo, {upsert: true}).exec();
-  // })
-  // return Promise.all(promises)
-
-
+let getAllRepos = (callback) => {
+  Repo.find({}, (err, results) => {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      callback(null, results);
+    }
+  });
 }
 
 module.exports.save = save;
+module.exports.getAllRepos = getAllRepos;

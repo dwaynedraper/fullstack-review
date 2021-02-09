@@ -14,12 +14,13 @@ app.post('/repos', function (req, res) {
   // and get the repo information from the github API, then
   // save the repo information in the database
   let username = req.body.username;
+  console.log('username', username);
   helpers.getReposByUsername(username, (err, results)  => {
     if (err) {
       res.send(err);
     } else {
       results.forEach((result) => {
-        db.save(result)
+        database.save(result)
       })
       res.sendStatus(200);
     }
@@ -30,6 +31,14 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+  database.getAllRepos((err, results) => {
+    if (err) {
+      console.error('err', err);
+      res.sendStatus(500);
+    } else {
+      res.send(results);
+    }
+  })
 });
 
 let port = 1128;

@@ -33,11 +33,17 @@ class App extends React.Component {
       .done((data) => {
         this.setState({repos: data})
       })
-      .fail(
-        console.log('GET failed')
+      .fail((err) => {
+        if (err) {
+          console.log('GET failed', err)
+        }
+      }
       )
-    ).fail(
-      console.log(('POST failed'))
+    ).fail((err) => {
+      if (err) {
+        console.log('POST failed', err)
+      }
+    }
     )
   }
 

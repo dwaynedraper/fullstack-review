@@ -5,6 +5,7 @@ const database = require('../database/')
 let getReposByUsername = (username, callback) => {
   // TODO - Use the axios module to request repos for a specific
   // user from the github API
+
   // The options object has been provided to help you out,
   // but you'll have to fill in the URL
   let options = {
@@ -17,10 +18,11 @@ let getReposByUsername = (username, callback) => {
 
   axios.get(options.url, options.headers)
   .then((response) => {
-    console.log('response', response.data.length, typeof(response.data));
+    // console.log('response', response.data, typeof(response.data));
     callback(null, response.data);
   })
   .catch((error) => {
+    console.error(error)
     callback(error);
   })
 

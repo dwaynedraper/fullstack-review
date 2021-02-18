@@ -15,7 +15,8 @@ let repoSchema = mongoose.Schema({
   userId: Number,
   userName: String,
   createdAt: Date,
-  url: String
+  url: String,
+  watchers: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
@@ -31,12 +32,13 @@ let save = (repo) => {
     userId: repo.owner.id,
     userName: repo.owner.login,
     createdAt: repo.created_at,
-    url: repo.html_url
+    url: repo.html_url,
+    watchers: repo.watchers
   });
   console.log('mongoRepo', mongoRepo)
-  Repo.findOneAndUpdate({repoId: repo.id}, {upsert:true}, (err, results) => {
+  Repo.updateOne({repoId: repo.id}, mongoRepo, {upsert:true}, (err, results) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
     } else {
       console.log('success saving')
     }
@@ -46,12 +48,12 @@ let save = (repo) => {
 let getAllRepos = (callback) => {
   Repo.find({}, (err, results) => {
     if (err) {
-      console.log(err);
+      // console.log(err);
       callback(err);
     } else {
       callback(null, results);
     }
-  });
+  }).sort({watchers: -1}).limit(25);
 }
 
 module.exports.save = save;

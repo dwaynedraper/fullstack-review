@@ -13,22 +13,36 @@ class App extends React.Component {
 
   }
 
+  componentDidMount() {
+    $.ajax({
+      url: `/getrepos`,
+      method: 'GET'
+    })
+    .done((data) => {
+      this.setState({repos: data})
+    })
+    .fail((err) => {
+      if (err) {
+        console.log('GET failed', err)
+      }
+    }
+    )
+  }
+
   search (term) {
     console.log(`${term} was searched`);
     // TODO
     let q = {username: term};
     $.ajax({
-      url: '/repos',
+      url: '/fetchrepos',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(q)
     }).done(
       //TODO
       $.ajax({
-        url: '/repos',
-        method: 'GET',
-        contentType: 'application/json',
-        data: JSON.stringify(q)
+        url: `/getrepos`,
+        method: 'GET'
       })
       .done((data) => {
         this.setState({repos: data})

@@ -50,7 +50,7 @@ let getAllRepos = (callback) => {
     } else {
       callback(null, results);
     }
-  }).sort({watchers: -1}).limit(50);
+  }).sort({watchers: -1}).limit(25);
 }
 
 module.exports.save = save;

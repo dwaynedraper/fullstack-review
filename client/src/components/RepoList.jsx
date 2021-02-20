@@ -3,7 +3,6 @@ import RepoListItem from './RepoListItem.jsx';
 
 const RepoList = (props) => (
   <div>
-    {console.log('props', props)}
     <h4> Repo List Component </h4>
     There are {props.repos.length} repos.
     {props.repos.map((repo, index) => {

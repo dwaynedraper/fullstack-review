@@ -14,6 +14,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.getRepos();
+  }
+
+  getRepos() {
     $.ajax({
       url: `/getrepos`,
       method: 'GET'
@@ -37,28 +41,14 @@ class App extends React.Component {
       url: '/fetchrepos',
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify(q)
-    }).done(
-      //TODO
-      $.ajax({
-        url: `/getrepos`,
-        method: 'GET'
-      })
-      .done((data) => {
-        this.setState({repos: data})
-      })
-      .fail((err) => {
-        if (err) {
-          console.log('GET failed', err)
-        }
+      data: JSON.stringify(q),
+      success: (data) => {
+        this.getRepos();
+      },
+      error: () => {
+        console.log('error')
       }
-      )
-    ).fail((err) => {
-      if (err) {
-        console.log('POST failed', err)
-      }
-    }
-    )
+    })
   }
 
   render () {

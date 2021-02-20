@@ -8,7 +8,6 @@ let repoSchema = mongoose.Schema({
   // TODO: your schema here!
   repoId: {
     type: String,
-    index: true,
     unique: true
   },
   repoName: String,
@@ -26,7 +25,7 @@ let save = (repo) => {
   // This function should save a repo or repos to
   // the MongoDB
   //TODO - instantiate a check to see if repo exists after getting save function working
-  let mongoRepo = new Repo({
+  let mongoRepo = {
     repoId: repo.id,
     repoName: repo.name,
     userId: repo.owner.id,
@@ -34,13 +33,12 @@ let save = (repo) => {
     createdAt: repo.created_at,
     url: repo.html_url,
     watchers: repo.watchers
-  });
-  console.log('mongoRepo', mongoRepo)
-  Repo.updateOne({repoId: repo.id}, mongoRepo, {upsert:true}, (err, results) => {
+  };
+  Repo.findOneAndUpdate({repoId: repo.id}, mongoRepo, {upsert:true}, (err, results) => {
     if (err) {
-      // console.error(err);
+      console.error(err);
     } else {
-      console.log('success saving')
+      console.log(`Success saving ${repo.name}`);
     }
   })
 };
@@ -48,12 +46,11 @@ let save = (repo) => {
 let getAllRepos = (callback) => {
   Repo.find({}, (err, results) => {
     if (err) {
-      // console.log(err);
       callback(err);
     } else {
       callback(null, results);
     }
-  }).sort({watchers: -1}).limit(25);
+  }).sort({watchers: -1}).limit(50);
 }
 
 module.exports.save = save;

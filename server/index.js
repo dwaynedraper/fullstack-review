@@ -9,19 +9,17 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
-console.log('-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-
 app.post('/fetchrepos', function (req, res) {
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
   // save the repo information in the database
   let username = req.body.username;
-  helpers.getReposByUsername(username, (err, results)  => {
+  helpers.getReposByUsername(username, async (err, results)  => {
     if (err) {
       res.send(err);
     } else {
-      results.forEach((result) => {
+      await results.map((result) => {
         database.save(result)
       })
       res.sendStatus(200);
